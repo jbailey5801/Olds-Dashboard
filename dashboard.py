@@ -1,8 +1,10 @@
+import streamlit as st
+import feedparser
+
+st.title("OWID Test")
+
 feed = feedparser.parse(
-2
-"https://ourworldindata.org/feed"
-3
+    "https://ourworldindata.org/feed"
 )
-4
-5
+
 st.write("Entries:", len(feed.entries))
