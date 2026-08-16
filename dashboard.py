@@ -1,17 +1,22 @@
 import streamlit as st
+import feedparser
 
 st.title("🌎 World Intelligence Dashboard")
 
-st.header("📈 Long-Term Trends")
-st.write("Our World in Data")
+sources = {
+    "Our World in Data":
+        "https://ourworldindata.org/feed.xml",
 
-st.header("🏗 Progress & Institutions")
-st.write("Works in Progress")
+    "Noahpinion":
+        "https://www.noahpinion.blog/feed"
+}
 
-st.header("⚙ Technology & Industry")
-st.write("Noahpinion")
-st.write("MIT Technology Review")
+for source, url in sources.items():
+    st.header(source)
 
-st.header("🌍 Geopolitics")
-st.write("The Economist")
-st.write("Foreign Affairs")
+    feed = feedparser.parse(url)
+
+    for article in feed.entries[:5]:
+        st.markdown(
+            f"- {article.link}"
+        )
