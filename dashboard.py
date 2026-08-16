@@ -1,15 +1,17 @@
 import streamlit as st
-import feedparser
+import urllib.request
 
 url = "https://ourworldindata.org/feed.xml"
 
-feed = feedparser.parse(url)
+try:
+    response = urllib.request.urlopen(url)
 
-st.write("Version:", feed.get("version"))
-st.write("Bozo:", feed.bozo)
-st.write("Entries:", len(feed.entries))
-st.write("Status:", getattr(feed, "status", "No status"))
+    content = response.read().decode(
+        "utf-8",
+        errors="ignore"
+    )
 
-if hasattr(feed, "bozo_exception"):
-    st.write("Error:")
-    st.write(feed.bozo_exception)
+    st.write(content[:2000])
+
+except Exception as e:
+    st.error(e)
