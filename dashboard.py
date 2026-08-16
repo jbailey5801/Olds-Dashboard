@@ -24,7 +24,7 @@ sections = {
 
     "🏗 Progress & Institutions": {
         "Works in Progress":
-            "https://worksinprogress.co/feed/"
+            "https://worksinprogress.co/rss.xml"
     },
 
     "⚙ Technology & Industry": {
