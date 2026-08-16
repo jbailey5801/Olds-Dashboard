@@ -1,20 +1,29 @@
 import streamlit as st
 import feedparser
 
+st.set_page_config(page_title="World Dashboard")
+
 st.title("🌎 World Intelligence Dashboard")
 
 sources = {
-    "Our World in Data":
+    "📈 Our World in Data":
         "https://ourworldindata.org/feed.xml",
 
-    "Noahpinion":
-        "https://www.noahpinion.blog/feed"
+    "🏗 Works in Progress":
+        "https://worksinprogress.co/feed",
+
+    "⚙ Noahpinion":
+        "https://www.noahpinion.blog/feed",
+
+    "🧪 MIT Technology Review":
+        "https://www.technologyreview.com/feed/"
 }
 
-for source, url in sources.items():
-    st.header(source)
+for source_name, feed_url in sources.items():
 
-    feed = feedparser.parse(url)
+    st.header(source_name)
+
+    feed = feedparser.parse(feed_url)
 
     for article in feed.entries[:5]:
         st.markdown(
