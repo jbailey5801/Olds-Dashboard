@@ -5,27 +5,48 @@ st.set_page_config(page_title="World Dashboard")
 
 st.title("🌎 World Intelligence Dashboard")
 
-sources = {
-    "📈 Our World in Data":
-        "https://ourworldindata.org/feed.xml",
+sections = {
 
-    "🏗 Works in Progress":
-        "https://worksinprogress.co/feed",
+    "📈 Long-Term Trends": {
+        "Our World in Data":
+            "https://ourworldindata.org/feed.xml"
+    },
 
-    "⚙ Noahpinion":
-        "https://www.noahpinion.blog/feed",
+    "🏗 Progress & Institutions": {
+        "Works in Progress":
+            "https://worksinprogress.co/feed"
+    },
 
-    "🧪 MIT Technology Review":
-        "https://www.technologyreview.com/feed/"
+    "⚙ Technology & Industry": {
+
+        "Noahpinion":
+            "https://www.noahpinion.blog/feed",
+
+        "MIT Technology Review":
+            "https://www.technologyreview.com/feed/"
+    }
 }
 
-for source_name, feed_url in sources.items():
+for category, feeds in sections.items():
 
-    st.header(source_name)
+    st.header(category)
 
-    feed = feedparser.parse(feed_url)
+    for source, url in feeds.items():
+
+        with st.expander(source):
+
+    feed = feedparser.parse(url)
 
     for article in feed.entries[:5]:
+
         st.markdown(
             f"- {article.link}"
         )
+
+        feed = feedparser.parse(url)
+
+        for article in feed.entries[:5]:
+
+            st.markdown(
+                f"- {article.link}"
+            )
