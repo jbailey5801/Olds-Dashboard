@@ -123,6 +123,43 @@ for source, url in feeds.items():
         feed = feedparser.parse(url)
 
         if len(feed.entries) == 0:
-
             st.warning(
+                "Feed unavailable or no articles found."
+            )
+            continue
+
+        for article in feed.entries[:article_count]:
+
+            title = getattr(
+                article,
+                "title",
+                "Untitled"
+            )
+
+            if search_term:
+                if search_term.lower() not in title.lower():
+                    continue
+
+            link = getattr(
+                article,
+                "link",
+                ""
+            )
+
+            summary = getattr(
+                article,
+                "summary",
+                ""
+            )
+
+            summary = clean_html(summary)
+
+            st.markdown(
+                f"### {link}"
+            )
+
+            if summary:
+                st.write(summary)
+
+            st.divider()
         
