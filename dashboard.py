@@ -1,5 +1,10 @@
+from openai import OpenAI
 import streamlit as st
 import feedparser
+
+client = OpenAI(
+    api_key=st.secrets["OPENAI_API_KEY"]
+)
 
 st.set_page_config(page_title="World Dashboard")
 
@@ -35,6 +40,40 @@ for category, feeds in sections.items():
 
         with st.expander(source):
 
+            feed = feedparser.parse(url)
+
+    for article in feed.entries[:5]:
+
+        title = article.title
+
+        summary = getattr(
+            article,
+            "summary",
+            ""
+        )
+
+        st.markdown(f"### {title}")
+
+        if summary:
+            st.caption(summary)
+
+        if st.button(
+            f"Analyze: {title}",
+            key=f"{source}_{title}"
+        ):
+
+            with st.spinner(
+                "Analyzing..."
+            ):
+
+                analysis = analyze_article(
+                    title,
+                    summary
+                )
+
+                st.write(analysis)
+``
+
     feed = feedparser.parse(url)
 
     for article in feed.entries[:5]:
@@ -50,3 +89,30 @@ for category, feeds in sections.items():
             st.markdown(
                 f"- {article.link}"
             )
+def analyze_article(title, summary):
+
+    prompt = f"""
+You are a geopolitical and economic analyst.
+
+Article:
+Title: {title}
+
+Summary:
+{summary}
+
+Provide:
+
+1. Main claim
+2. Why it matters
+3. Long-term implications
+4. Related themes
+
+Keep it under 150 words.
+"""
+
+    response = client.responses.create(
+        model="gpt-5",
+        input=prompt
+    )
+
+    return response.output_text
